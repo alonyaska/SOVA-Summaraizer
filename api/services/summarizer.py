@@ -1,7 +1,7 @@
 import re
 import uuid
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 from api.schemas import LogEntry, TaskResponse
 from api.services.supadata_client import SupadataAdapter
@@ -36,7 +36,7 @@ def _parse_video_id(url: str) -> str:
     return "unknown"
 
 
-def _add_log(task_id: str, source: str, text: str, status: str | None = None):
+def _add_log(task_id: str, source: str, text: str, status: Optional[str] = None):
     """Append a log entry to the task."""
     if task_id in tasks_db:
         tasks_db[task_id].logs.append(
@@ -56,7 +56,7 @@ class VideoSummarizerService:
         tasks_db[task_id] = TaskResponse(task_id=task_id, status="processing", logs=[])
         return task_id
 
-    def get_task_status(self, task_id: str) -> TaskResponse | None:
+    def get_task_status(self, task_id: str) -> Optional[TaskResponse]:
         return tasks_db.get(task_id)
 
     async def process_video_background(self, task_id: str, url: str, lang: str):

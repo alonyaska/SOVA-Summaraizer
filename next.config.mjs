@@ -7,15 +7,15 @@ const nextConfig = {
     unoptimized: true,
   },
   async rewrites() {
-    if (process.env.NODE_ENV === "development") {
-      return [
-        {
-          source: "/api/v1/:path*",
-          destination: "http://localhost:8000/api/v1/:path*",
-        },
-      ]
-    }
-    return []
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:8000/api/v1/:path*"
+            : "/api/main",
+      },
+    ]
   },
 }
 
