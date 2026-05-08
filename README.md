@@ -1,7 +1,7 @@
 # <p align="center">🦉 SOVA YT_SUMMARIZER</p>
 
 <p align="center">
-  <img src="public/readme-assets/banner.png" alt="SOVA Banner" width="100%">
+  <img src="https://cdn.leonardo.ai/users/3dbee0af-1e14-473e-8b7f-95118cbc7141/generations/1f14471f-48ef-69c0-a8cc-c2bf302fc751/gemini-2.5-flash-image_A_minimalist_logo_for_a_secure_AI_messenger_called_Sova_owl_._No_text_icon_only.-0.jpg" alt="SOVA Banner" width="100%">
 </p>
 
 <p align="center">
