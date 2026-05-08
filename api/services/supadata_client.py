@@ -1,7 +1,7 @@
 import time
 import asyncio
 from supadata import Supadata
-from config import settings
+from api.config import settings
 
 
 class SupadataAdapter:
