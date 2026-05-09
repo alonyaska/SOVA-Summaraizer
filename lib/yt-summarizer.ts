@@ -55,7 +55,7 @@ export function buildProcessingLog(_videoId: string): LogLine[] {
     { time: nowStamp(1), source: "sys_core", text: "Транскрипт получен. Размер: 18.4KB" },
     { time: nowStamp(1), source: "sova_ai", text: "> Анализирую запрос... Очистка от воды." },
     { time: nowStamp(2), source: "sova_ai", text: "> Кластеризация ключевых тезисов..." },
-    { time: nowStamp(2), source: "sova_ai", text: "> Компилирую саммари. Модель: gpt-4o-mini" },
+    { time: nowStamp(2), source: "sova_ai", text: "> Компилирую саммари. Модель: Gemini 2.5 Flash" },
     { time: nowStamp(3), source: "sys_core", text: "Готово. Time-to-summary: 2.41s", status: "OK" },
   ]
 }

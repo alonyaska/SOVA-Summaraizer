@@ -1,20 +1,20 @@
 # <p align="center">🦉 SOVA YT_SUMMARIZER</p>
 
 <p align="center">
-  <img src="https://cdn.leonardo.ai/users/3dbee0af-1e14-473e-8b7f-95118cbc7141/generations/1f14471f-48ef-69c0-a8cc-c2bf302fc751/gemini-2.5-flash-image_A_minimalist_logo_for_a_secure_AI_messenger_called_Sova_owl_._No_text_icon_only.-0.jpg" alt="SOVA Banner" width="100%">
+  <img src="public/readme-assets/banner.png" alt="SOVA Banner" width="420">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Next.js-15+-black?style=for-the-badge&logo=next.js" alt="Next.js">
+  <img src="https://img.shields.io/badge/Next.js-16+-black?style=for-the-badge&logo=next.js" alt="Next.js">
   <img src="https://img.shields.io/badge/FastAPI-0.100+-05998b?style=for-the-badge&logo=fastapi" alt="FastAPI">
-  <img src="https://img.shields.io/badge/Google_Gemini-3_Flash-4285F4?style=for-the-badge&logo=google" alt="Gemini">
+  <img src="https://img.shields.io/badge/Google_Gemini-2.5_Flash-4285F4?style=for-the-badge&logo=google" alt="Gemini">
   <img src="https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel" alt="Vercel">
 </p>
 
 ---
 
 ## 🌟 Обзор
-**SOVA YT_SUMMARIZER** — это интеллектуальный сервис для мгновенного анализа и суммаризации YouTube-видео. Используя мощь **Gemini 3 Flash** и **Supadata**, приложение извлекает суть из любого видео, экономя часы вашего времени.
+**SOVA YT_SUMMARIZER** — это интеллектуальный сервис для мгновенного анализа и суммаризации YouTube-видео. Используя мощь **Gemini 2.5 Flash** и **Supadata**, приложение извлекает суть из любого видео, экономя часы вашего времени.
 
 Данный проект является частью экосистемы **SOVA-PLAYGROUND** — набора инструментов для экспериментов с AI и современными веб-технологиями.
 
@@ -26,9 +26,9 @@
 - **Vercel Optimized**: Полностью готов к деплою в serverless окружение.
 
 ## 🛠 Технологический стек
-- **Frontend**: React 19, Next.js (App Router), Tailwind CSS, Shadcn/UI.
+- **Frontend**: React 19, Next.js 16 (App Router), Tailwind CSS v4, Shadcn/UI.
 - **Backend**: Python 3.12, FastAPI, Pydantic v2.
-- **AI/API**: Google Gemini 3 Flash SDK, Supadata (Transcript extraction).
+- **AI/API**: Google Gemini 2.5 Flash SDK, Supadata (Transcript extraction).
 
 ## 🚀 Быстрый старт
 

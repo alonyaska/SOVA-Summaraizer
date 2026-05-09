@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Image from "next/image"
 import { ModeToggle } from "./mode-toggle"
 import type { Mode, Theme } from "@/lib/yt-summarizer"
 import { generateTypoEffect } from "@/lib/yt-summarizer"
@@ -90,6 +91,13 @@ export function Hero({ mode, theme, onModeChange, onThemeChange }: Props) {
       {/* status bar */}
       <div className="flex items-center justify-between border-b border-border bg-card/50 px-4 py-2 font-mono text-[11px] text-muted-foreground sm:px-8">
         <div className="flex items-center gap-3">
+          <Image
+            src="/readme-assets/banner.png"
+            alt="SOVA"
+            width={28}
+            height={28}
+            className="rounded-sm opacity-90"
+          />
           <span className="inline-flex items-center gap-1.5">
             <span className="relative inline-flex h-2 w-2">
               <span className="absolute inset-0 animate-ping rounded-full bg-success opacity-60" />
@@ -165,7 +173,7 @@ export function Hero({ mode, theme, onModeChange, onThemeChange }: Props) {
           {[
             { k: "MODULE", v: "yt_summarizer" },
             { k: "LANG", v: "ru / en" },
-            { k: "ENGINE", v: "gpt-4o-mini" },
+            { k: "ENGINE", v: "gemini-2.5-flash" },
             { k: "AVG_TIME", v: "~2.4s" },
           ].map((t) => (
             <span
