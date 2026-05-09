@@ -92,7 +92,7 @@ export function Hero({ mode, theme, onModeChange, onThemeChange }: Props) {
       <div className="flex items-center justify-between border-b border-border bg-card/50 px-4 py-2 font-mono text-[11px] text-muted-foreground sm:px-8">
         <div className="flex items-center gap-3">
           <Image
-            src="/readme-assets/banner.png"
+            src="/sova-logo.jpg"
             alt="SOVA"
             width={28}
             height={28}
