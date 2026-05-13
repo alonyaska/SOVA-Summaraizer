@@ -84,7 +84,7 @@ class VideoSummarizerService:
             # Step 4: Send to AI
             _add_log(task_id, "sova_ai", "> Анализирую запрос... Очистка от воды.")
             _add_log(task_id, "sova_ai", "> Кластеризация ключевых тезисов...")
-            _add_log(task_id, "sova_ai", "> Компилирую саммари. Модель: Gemini 2.5 Flash")
+            _add_log(task_id, "sova_ai", "> Компилирую саммари. Модель: Gemini 2.0 Flash")
 
             result = await self.gemini.summarize_transcript(
                 transcript_text=transcript,
