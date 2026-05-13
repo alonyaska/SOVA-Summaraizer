@@ -3,9 +3,9 @@ import uuid
 from datetime import datetime
 from typing import Dict, Optional
 
-from api.schemas import LogEntry, TaskResponse
-from api.services.supadata_client import SupadataAdapter
-from api.services.gemini_client import GeminiAdapter
+from schemas import LogEntry, TaskResponse
+from services.supadata_client import SupadataAdapter
+from services.gemini_client import GeminiAdapter
 
 
 # In-memory task storage (use Redis/PostgreSQL in production)

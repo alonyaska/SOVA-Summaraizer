@@ -1,8 +1,8 @@
 import json
 import asyncio
 from google import genai
-from api.config import settings
-from api.schemas import SummaryBullet, SummaryResult
+from config import settings
+from schemas import SummaryBullet, SummaryResult
 
 
 class GeminiAdapter:

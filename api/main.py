@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routers import video
+from routers import video
 
 app = FastAPI(
     title="SOVA YT Summarizer API",

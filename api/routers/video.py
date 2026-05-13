@@ -1,6 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks, HTTPException
-from api.schemas import VideoRequest, TaskResponse
-from api.services.summarizer import VideoSummarizerService
+from schemas import VideoRequest, TaskResponse
+from services.summarizer import VideoSummarizerService
 
 router = APIRouter(prefix="/api/v1/videos", tags=["Videos"])
 
