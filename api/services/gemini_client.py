@@ -10,7 +10,7 @@ class GeminiAdapter:
 
     def __init__(self):
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
-        self.model_name = "gemini-2.0-flash"
+        self.model_name = "gemma-4-26b-a4b-it"
 
     async def summarize_transcript(self, transcript_text: str, video_id: str, url: str) -> SummaryResult:
         """Send transcript to Gemini and get structured summary back."""

@@ -7,14 +7,14 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-16+-black?style=for-the-badge&logo=next.js" alt="Next.js">
   <img src="https://img.shields.io/badge/FastAPI-0.100+-05998b?style=for-the-badge&logo=fastapi" alt="FastAPI">
-  <img src="https://img.shields.io/badge/Google_Gemini-2.5_Flash-4285F4?style=for-the-badge&logo=google" alt="Gemini">
+  <img src="https://img.shields.io/badge/Google_Gemma-4_26B-4285F4?style=for-the-badge&logo=google" alt="Gemma">
   <img src="https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel" alt="Vercel">
 </p>
 
 ---
 
 ## 🌟 Обзор
-**SOVA YT_SUMMARIZER** — это интеллектуальный сервис для мгновенного анализа и суммаризации YouTube-видео. Используя мощь **Gemini 2.5 Flash** и **Supadata**, приложение извлекает суть из любого видео, экономя часы вашего времени.
+**SOVA YT_SUMMARIZER** — это интеллектуальный сервис для мгновенного анализа и суммаризации YouTube-видео. Используя мощь **Gemma 4 26B** и **Supadata**, приложение извлекает суть из любого видео, экономя часы вашего времени.
 
 Данный проект является частью экосистемы **SOVA-PLAYGROUND** — набора инструментов для экспериментов с AI и современными веб-технологиями.
 
@@ -28,7 +28,7 @@
 ## 🛠 Технологический стек
 - **Frontend**: React 19, Next.js 16 (App Router), Tailwind CSS v4, Shadcn/UI.
 - **Backend**: Python 3.12, FastAPI, Pydantic v2.
-- **AI/API**: Google Gemini 2.5 Flash SDK, Supadata (Transcript extraction).
+- **AI/API**: Google Gemma 4 26B SDK, Supadata (Transcript extraction).
 
 ## 🚀 Быстрый старт
 

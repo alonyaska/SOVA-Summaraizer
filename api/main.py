@@ -15,7 +15,7 @@ from routers import video
 app = FastAPI(
     title="SOVA YT Summarizer API",
     version="1.0.0",
-    description="Микросервис суммаризации YouTube видео через Supadata + Gemini 2.0 Flash",
+    description="Микросервис суммаризации YouTube видео через Supadata + Gemma 4 26B",
 )
 
 # CORS — allow Next.js dev server
