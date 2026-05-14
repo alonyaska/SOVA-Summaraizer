@@ -5,6 +5,14 @@
       "maxDuration": 60
     }
   },
+  "overrides": [
+    {
+      "path": "api/index.py",
+      "override": {
+        "path": "api/index.py"
+      }
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/v1/(.*)",
