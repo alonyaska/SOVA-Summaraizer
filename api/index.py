@@ -11,8 +11,10 @@ current_dir = Path(__file__).parent.absolute()
 if str(current_dir) not in sys.path:
     sys.path.append(str(current_dir))
 
-from fastapi import FastAPI
+import traceback
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from routers import video
 from services.summarizer import VideoSummarizerService
 from contextlib import asynccontextmanager
@@ -51,6 +53,18 @@ app.add_middleware(
 )
 
 app.include_router(video.router)
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Catch all unhandled exceptions and return them in the response."""
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": str(exc),
+            "traceback": traceback.format_exc(),
+        },
+    )
 
 
 @app.get("/health")
