@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 from typing import Dict, Optional
 
-from schemas import LogEntry, TaskResponse
+from schemas import LogEntry, SummaryResult, TaskResponse
 from services.supadata_client import SupadataAdapter
 from services.gemini_client import GeminiAdapter
 
@@ -59,46 +59,23 @@ class VideoSummarizerService:
     def get_task_status(self, task_id: str) -> Optional[TaskResponse]:
         return tasks_db.get(task_id)
 
-    async def process_video_background(self, task_id: str, url: str, lang: str):
-        """Run full pipeline in background: transcript → summarize → store result."""
-        try:
-            video_id = _parse_video_id(url)
+    async def process_video(self, url: str, lang: str) -> SummaryResult:
+        """Run full pipeline synchronously: transcript → summarize → return result."""
+        video_id = _parse_video_id(url)
 
-            # Step 1: Ping
-            _add_log(task_id, "sys_core", "Пинг серверов YouTube...", "OK")
+        # Step 1: Get transcript
+        transcript = await self.supadata.get_transcript(url=url, lang=lang)
 
-            # Step 2: Extract metadata
-            _add_log(task_id, "sys_core", f"Извлечение метаданных видео [{video_id}]...")
+        if not transcript or not transcript.strip():
+            raise Exception("Транскрипт пуст или недоступен.")
 
-            # Step 3: Get transcript
-            _add_log(task_id, "sys_core", f"Поиск дорожки субтитров [{lang}]...")
+        transcript_size = f"{len(transcript.encode('utf-8')) / 1024:.1f}KB"
 
-            transcript = await self.supadata.get_transcript(url=url, lang=lang)
+        # Step 2: Send to AI
+        result = await self.gemini.summarize_transcript(
+            transcript_text=transcript,
+            video_id=video_id,
+            url=url,
+        )
 
-            if not transcript or not transcript.strip():
-                raise Exception("Транскрипт пуст или недоступен.")
-
-            transcript_size = f"{len(transcript.encode('utf-8')) / 1024:.1f}KB"
-            _add_log(task_id, "sys_core", f"Транскрипт получен. Размер: {transcript_size}", "OK")
-
-            # Step 4: Send to AI
-            _add_log(task_id, "sova_ai", "> Анализирую запрос... Очистка от воды.")
-            _add_log(task_id, "sova_ai", "> Кластеризация ключевых тезисов...")
-            _add_log(task_id, "sova_ai", "> Компилирую саммари. Модель: Gemma 4 26B")
-
-            result = await self.gemini.summarize_transcript(
-                transcript_text=transcript,
-                video_id=video_id,
-                url=url,
-            )
-
-            # Step 5: Done
-            _add_log(task_id, "sys_core", "Готово. Саммари сгенерировано.", "OK")
-
-            tasks_db[task_id].status = "completed"
-            tasks_db[task_id].result = result
-
-        except Exception as e:
-            _add_log(task_id, "error", f"FATAL: {str(e)}", "ERR")
-            tasks_db[task_id].status = "failed"
-            tasks_db[task_id].error = str(e)
+        return result
