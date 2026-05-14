@@ -5,28 +5,34 @@
 
 /* Casual Mode (default light-ish, but we still default to hardcore via .dark on html) */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(0.985 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  /* Warm Beige Background */
+  --background: oklch(0.97 0.012 75);
+  /* Deep Slate/Black text */
+  --foreground: oklch(0.2 0.02 250);
+  /* Pure white or slightly warmer cards for contrast */
+  --card: oklch(0.99 0.005 75);
+  --card-foreground: oklch(0.2 0.02 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.62 0.18 255);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.45 0 0);
-  --accent: oklch(0.62 0.18 255);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.6 0.22 25);
-  --destructive-foreground: oklch(0.985 0 0);
-  --success: oklch(0.7 0.18 145);
-  --warning: oklch(0.78 0.16 85);
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.95 0 0);
-  --ring: oklch(0.62 0.18 255);
-  --radius: 0.25rem;
+  --popover-foreground: oklch(0.2 0.02 250);
+  /* Modern Slate Blue/Indigo */
+  --primary: oklch(0.35 0.06 260);
+  --primary-foreground: oklch(0.98 0.005 75);
+  --secondary: oklch(0.94 0.01 75);
+  --secondary-foreground: oklch(0.25 0.02 250);
+  --muted: oklch(0.94 0.01 75);
+  --muted-foreground: oklch(0.45 0.02 250);
+  --accent: oklch(0.35 0.06 260);
+  --accent-foreground: oklch(0.98 0.005 75);
+  /* Softer status colors */
+  --destructive: oklch(0.55 0.18 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --success: oklch(0.65 0.15 145);
+  --warning: oklch(0.72 0.12 85);
+  /* Thin slate lines */
+  --border: oklch(0.88 0.01 75);
+  --input: oklch(0.92 0.01 75);
+  --ring: oklch(0.35 0.06 260);
+  --radius: 0.5rem;
 }
 
 /* Hardcore Mode — cyberpunk terminal (blue) */
@@ -95,21 +101,21 @@ html.dark.theme-youtube {
 
 /* YouTube Red Theme (Casual / Light) */
 html:not(.dark).theme-youtube {
-  /* Warm white background */
-  --background: oklch(0.98 0.005 15);
+  /* Same Warm Beige Background */
+  --background: oklch(0.97 0.012 75);
   /* Dark text */
   --foreground: oklch(0.18 0.01 320);
-  /* Soft warm card */
-  --card: oklch(0.96 0.008 15);
+  /* White card for YouTube look */
+  --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0.01 320);
-  --popover: oklch(0.97 0.005 15);
+  --popover: oklch(0.99 0.005 75);
   --popover-foreground: oklch(0.18 0.01 320);
   /* YouTube brand red */
   --primary: oklch(0.55 0.27 18);
   --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.94 0.01 15);
+  --secondary: oklch(0.94 0.01 75);
   --secondary-foreground: oklch(0.25 0.01 320);
-  --muted: oklch(0.94 0.008 15);
+  --muted: oklch(0.94 0.008 75);
   --muted-foreground: oklch(0.45 0.01 320);
   --accent: oklch(0.55 0.27 18);
   --accent-foreground: oklch(0.98 0 0);
@@ -119,8 +125,8 @@ html:not(.dark).theme-youtube {
   /* Green */
   --success: oklch(0.65 0.2 145);
   --warning: oklch(0.72 0.16 85);
-  --border: oklch(0.88 0.015 15);
-  --input: oklch(0.92 0.01 15);
+  --border: oklch(0.88 0.015 75);
+  --input: oklch(0.92 0.01 75);
   --ring: oklch(0.55 0.27 18);
 }
 
@@ -206,6 +212,31 @@ html:not(.dark).theme-youtube {
     linear-gradient(to bottom, color-mix(in oklch, var(--border) 60%, transparent) 1px, transparent 1px);
   background-size: 40px 40px;
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* Loader from Uiverse.io by alexruix - https://uiverse.io/alexruix/big-octopus-60 */
+@keyframes text_713 {
+  0% { letter-spacing: 1px; transform: translateX(0px); }
+  40% { letter-spacing: 2px; transform: translateX(26px); }
+  80% { letter-spacing: 1px; transform: translateX(32px); }
+  90% { letter-spacing: 2px; transform: translateX(0px); }
+  100% { letter-spacing: 1px; transform: translateX(0px); }
+}
+
+@keyframes loading_713 {
+  0% { width: 16px; transform: translateX(0px); }
+  40% { width: 100%; transform: translateX(0px); }
+  80% { width: 16px; transform: translateX(64px); }
+  90% { width: 100%; transform: translateX(0px); }
+  100% { width: 16px; transform: translateX(0px); }
+}
+
+@keyframes loading2_713 {
+  0% { transform: translateX(0px); width: 16px; }
+  40% { transform: translateX(0%); width: 80%; }
+  80% { width: 100%; transform: translateX(0px); }
+  90% { width: 80%; transform: translateX(15px); }
+  100% { transform: translateX(0px); width: 16px; }
 }
 
 /* Glow utility */

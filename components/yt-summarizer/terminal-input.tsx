@@ -75,7 +75,7 @@ export function TerminalInput({ mode, disabled, onSubmit }: Props) {
               <button
                 type="button"
                 onClick={() => setUrl("")}
-                aria-label="Очистить"
+                aria-label="очистить"
                 className="rounded p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
               >
                 <X className="h-4 w-4" />
@@ -100,7 +100,7 @@ export function TerminalInput({ mode, disabled, onSubmit }: Props) {
     )
   }
 
-  // ── Hardcore terminal mode ────────────────────────────────────
+  // -- Hardcore terminal mode ------------------------------------
   return (
     <section aria-label="Командная строка" className="mx-auto w-full max-w-5xl px-4 sm:px-8">
       <form
@@ -121,9 +121,9 @@ export function TerminalInput({ mode, disabled, onSubmit }: Props) {
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-destructive/70" />
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-warning/70" />
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-success/70" />
-            <span className="ml-2">— bash — sova_yt_parser</span>
+            <span className="ml-2">- bash - sova_yt_parser</span>
           </div>
-          <span className="hidden sm:inline">PID 4137 · TTY pts/0</span>
+          <span className="hidden sm:inline">PID 4137 . TTY pts/0</span>
         </div>
 
         <div className="flex items-start gap-2 px-4 py-4 sm:py-5">
@@ -169,7 +169,7 @@ export function TerminalInput({ mode, disabled, onSubmit }: Props) {
         <div className="flex flex-col-reverse gap-2 border-t border-border px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="font-mono text-[11px] text-muted-foreground">
             <kbd className="rounded-sm border border-border bg-background px-1.5 py-0.5">Enter</kbd>{" "}
-            to execute ·{" "}
+            to execute .{" "}
             <kbd className="rounded-sm border border-border bg-background px-1.5 py-0.5">Esc</kbd>{" "}
             to clear
           </div>

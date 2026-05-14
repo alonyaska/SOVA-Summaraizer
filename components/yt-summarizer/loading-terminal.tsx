@@ -71,7 +71,7 @@ export function LoadingTerminal({ mode, log, onComplete, cached, live }: Props) 
   return (
     <section
       aria-live="polite"
-      aria-label="Обработка запроса"
+      aria-label="обработка запроса"
       className="mx-auto w-full max-w-5xl px-4 sm:px-8"
     >
       <div
@@ -87,8 +87,8 @@ export function LoadingTerminal({ mode, log, onComplete, cached, live }: Props) 
               <span className="absolute inset-0 animate-ping rounded-full bg-primary opacity-60" />
               <span className="relative inline-block h-2 w-2 rounded-full bg-primary" />
             </span>
-            <span className="text-primary">PROCESSING</span>
-            <span aria-hidden>·</span>
+            <span className="text-primary">обработка</span>
+            <span aria-hidden>.</span>
             <span>sova_core.exec()</span>
           </div>
           {cached && (
@@ -105,12 +105,9 @@ export function LoadingTerminal({ mode, log, onComplete, cached, live }: Props) 
           {visible.map((line, idx) => (
             <LogRow key={idx} line={line} />
           ))}
-          {/* working cursor — show while still processing */}
+          {/* working cursor - show while still processing */}
           {(live || visibleCount < log.length) && (
-            <div className="mt-1 flex items-center gap-2 text-muted-foreground">
-              <Spinner />
-              <span>working...</span>
-            </div>
+            <FakeProgressBar mode={mode} />
           )}
         </div>
       </div>
@@ -149,13 +146,58 @@ function LogRow({ line }: { line: LogLine }) {
   )
 }
 
-function Spinner() {
-  const frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
-  const [i, setI] = useState(0)
+function FakeProgressBar({ mode }: { mode: Mode }) {
+  const [progress, setProgress] = useState(0)
+
   useEffect(() => {
-    const id = window.setInterval(() => setI((x) => (x + 1) % frames.length), 90)
-    return () => window.clearInterval(id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 99) return 99
+        // Logarithmic-like slowdown: fast at first, slow near 99
+        const diff = 99 - p
+        const step = Math.max(1, Math.floor(Math.random() * (diff / 4)))
+        return p + step
+      })
+    }, 400)
+    return () => clearInterval(interval)
   }, [])
-  return <span className="text-primary">{frames[i]}</span>
+
+  if (mode === "hardcore") {
+    const totalLen = 25
+    const filledCount = Math.floor((progress / 100) * totalLen)
+    const emptyCount = Math.max(0, totalLen - filledCount - 1)
+    const bar = "=".repeat(filledCount) + ">" + " ".repeat(emptyCount)
+
+    return (
+      <div className="mt-2 flex items-center gap-3 text-muted-foreground">
+        <span className="text-primary font-mono">[{bar}]</span>
+        <span className="w-10 text-right font-mono">{progress}%</span>
+      </div>
+    )
+  }
+
+  // Casual mode — Uiverse loader by alexruix
+  return (
+    <div className="mt-4 mb-2 relative w-20 h-[50px]">
+      <p className="absolute top-0 p-0 m-0 text-muted-foreground text-xs tracking-[1px]" style={{ animation: "text_713 3.5s ease both infinite" }}>
+        loading
+      </p>
+      <span
+        className="block rounded-[50px] h-4 w-4 absolute bottom-0"
+        style={{
+          backgroundColor: "var(--primary)",
+          transform: "translateX(64px)",
+          animation: "loading_713 3.5s ease both infinite",
+        }}
+      >
+        <span
+          className="absolute inset-0 rounded-[inherit]"
+          style={{
+            backgroundColor: "color-mix(in srgb, var(--primary) 50%, transparent)",
+            animation: "loading2_713 3.5s ease both infinite",
+          }}
+        />
+      </span>
+    </div>
+  )
 }

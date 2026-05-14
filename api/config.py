@@ -8,8 +8,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
 
     class Config:
-        # If .env exists, it will be loaded, but it's not required
-        env_file = ".env"
+        env_file = Path(__file__).parent / ".env"
         extra = "ignore"
 
 

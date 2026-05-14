@@ -18,7 +18,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "<SOVA> // YT_SUMMARIZER",
   description:
-    "Извлечение смыслов. Обход воды. Генерация саммари за миллисекунды. Микросервис экосистемы SOVA Playground.",
+    "Извлечение смыслов. обход воды. Генерация саммари за миллисекунды. Микросервис экосистемы SOVA Playground.",
   generator: "v0.app",
 }
 

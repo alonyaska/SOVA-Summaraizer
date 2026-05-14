@@ -53,7 +53,7 @@ export default function Page() {
     }
   }, [theme])
 
-  // ── Polling logic ─────────────────────────────────────────────
+  // -- Polling logic ---------------------------------------------
   const stopPolling = useCallback(() => {
     if (pollingRef.current !== null) {
       window.clearInterval(pollingRef.current)
@@ -103,7 +103,7 @@ export default function Page() {
     [stopPolling],
   )
 
-  // ── Submit handler ────────────────────────────────────────────
+  // -- Submit handler --------------------------------------------
   const handleSubmit = useCallback(
     async (url: string) => {
       try {
@@ -268,7 +268,7 @@ function FeatureGrid({ mode }: { mode: Mode }) {
     >
       <div className="mb-4 flex items-center gap-3 font-mono text-xs text-muted-foreground">
         <span className="h-px flex-1 bg-border" />
-        <span>{"// CAPABILITIES"}</span>
+        <span>// CAPABILITIES</span>
         <span className="h-px flex-1 bg-border" />
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
@@ -315,15 +315,15 @@ function Footer({ mode }: { mode: Mode }) {
       <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-3 px-4 py-6 font-mono text-[11px] text-muted-foreground sm:flex-row sm:items-center sm:px-8">
         <div className="flex items-center gap-2">
           <span className="text-primary">{"<SOVA>"}</span>
-          <span aria-hidden>·</span>
+          <span aria-hidden>.</span>
           <span>YT_SUMMARIZER</span>
-          <span aria-hidden>·</span>
+          <span aria-hidden>.</span>
           <span>part of SOVA Playground</span>
         </div>
         <div className="flex items-center gap-3">
           <span>build {mode === "hardcore" ? "0xCAFE" : "casual.1"}</span>
-          <span aria-hidden>·</span>
-          <span className="text-success">● online</span>
+          <span aria-hidden>.</span>
+          <span className="text-success">@ online</span>
         </div>
       </div>
     </footer>

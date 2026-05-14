@@ -105,9 +105,9 @@ export function Hero({ mode, theme, onModeChange, onThemeChange }: Props) {
             </span>
             <span className="text-success">ONLINE</span>
           </span>
-          <span aria-hidden>│</span>
+          <span aria-hidden>|</span>
           <span>sova_yt_parser.sh</span>
-          <span aria-hidden className="hidden sm:inline">│</span>
+          <span aria-hidden className="hidden sm:inline">|</span>
           <span className="hidden sm:inline">v0.4.2-beta</span>
         </div>
         <ModeToggle 
@@ -160,7 +160,7 @@ export function Hero({ mode, theme, onModeChange, onThemeChange }: Props) {
         >
           {isHardcore ? (
             <>
-              <span className="text-success">$</span> Извлечение смыслов. Обход воды. Генерация
+              <span className="text-success">$</span> Извлечение смыслов. обход воды. Генерация
               саммари за миллисекунды.
             </>
           ) : (

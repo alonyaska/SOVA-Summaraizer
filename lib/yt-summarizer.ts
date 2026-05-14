@@ -64,7 +64,7 @@ export function buildProcessingLog(_videoId: string): LogLine[] {
     { time: nowStamp(0), source: "sys_core", text: "Извлечение метаданных видео..." },
     { time: nowStamp(0), source: "sys_core", text: "Поиск дорожки субтитров [ru, en]...", status: "OK" },
     { time: nowStamp(1), source: "sys_core", text: "Транскрипт получен. Размер: 18.4KB" },
-    { time: nowStamp(1), source: "sova_ai", text: "> Анализирую запрос... Очистка от воды." },
+    { time: nowStamp(1), source: "sova_ai", text: "> Анализирую запрос... очистка от воды." },
     { time: nowStamp(2), source: "sova_ai", text: "> Кластеризация ключевых тезисов..." },
     { time: nowStamp(2), source: "sova_ai", text: "> Компилирую саммари. Модель: Gemini 2.5 Flash" },
     { time: nowStamp(3), source: "sys_core", text: "Готово. Time-to-summary: 2.41s", status: "OK" },
@@ -81,12 +81,12 @@ const MOCK_LIBRARY: Omit<SummaryResult, "videoId" | "url">[] = [
     durationRead: "1:48",
     mainIdea: "Механизм self-attention заменил рекуррентные сети, потому что распараллеливается и улавливает дальние зависимости в тексте лучше LSTM.",
     keyPoints: [
-      { timecode: "00:42", title: "RNN Constraints", description: "Проблема RNN/LSTM — последовательность блокирует распараллеливание на GPU." },
+      { timecode: "00:42", title: "RNN Constraints", description: "Проблема RNN/LSTM - последовательность блокирует распараллеливание на GPU." },
       { timecode: "03:15", title: "Self-Attention", description: "Self-attention считает релевантность каждого токена ко всем остальным за один проход." },
-      { timecode: "09:08", title: "Multi-head Attention", description: "Multi-head attention: разные «головы» учат разные типы связей — синтаксис, семантику, кореференции." },
+      { timecode: "09:08", title: "Multi-head Attention", description: "Multi-head attention: разные \"головы\" учат разные типы связей - синтаксис, семантику, кореференции." },
     ],
     action_items: ["Изучить механизм attention", "Прочитать статью Attention Is All You Need"],
-    notable_quotes: ["Внимание — это всё, что вам нужно"],
+    notable_quotes: ["Внимание - это всё, что вам нужно"],
     mentions: { tools: ["PyTorch", "TensorFlow"], people: ["Ashish Vaswani"], resources: ["ArXiv"] },
     tags: ["AI", "ML", "Transformers", "Deep Learning", "NLP"],
     actionItems: [],
@@ -100,7 +100,7 @@ const MOCK_LIBRARY: Omit<SummaryResult, "videoId" | "url">[] = [
     durationRead: "2:10",
     mainIdea: "Большинство стартапов умирают не от конкурентов, а от потери фокуса, преждевременного масштабирования и игнорирования юнит-экономики.",
     keyPoints: [
-      { timecode: "01:20", title: "Building in Vacum", description: "Главный убийца — building в вакууме без customer development." },
+      { timecode: "01:20", title: "Building in Vacum", description: "Главный убийца - building в вакууме без customer development." },
       { timecode: "08:44", title: "Premature Scaling", description: "Преждевременный hire: 20 инженеров до product-market fit сжигают раннер за квартал." },
     ],
     actionItems: ["Сделать CustDev", "Проверить юнит-экономику"],
@@ -161,4 +161,15 @@ export function generateTypoEffect(text: string, typoChance: number = 0.05) {
   }
 
   return { hasTypo: true, steps }
+}
+
+export function timecodeToSeconds(timecode: string): number {
+  const parts = timecode.split(":").map(Number)
+  if (parts.length === 2) {
+    return parts[0] * 60 + parts[1]
+  }
+  if (parts.length === 3) {
+    return parts[0] * 3600 + parts[1] * 60 + parts[2]
+  }
+  return 0
 }

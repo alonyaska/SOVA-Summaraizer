@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { Check, Clock, Copy, Database, Download, Hash, Plus, Tv } from "lucide-react"
-import type { SummaryResult, Mode as ModeType } from "@/lib/yt-summarizer"
-import { generateTypoEffect } from "@/lib/yt-summarizer"
+import type { SummaryResult } from "@/lib/yt-summarizer"
+import { timecodeToSeconds, generateTypoEffect } from "@/lib/yt-summarizer"
 import type { Mode } from "./mode-toggle"
 import { cn } from "@/lib/utils"
 
@@ -155,7 +155,7 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
                 CACHE_HIT
               </span>
             )}
-            <span className="hidden sm:inline">UTF-8 · txt</span>
+            <span className="hidden sm:inline">UTF-8 . txt</span>
           </div>
         </div>
 
@@ -176,7 +176,7 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
                 <Tv className="h-3.5 w-3.5" aria-hidden />
-                {result.category} <span className="opacity-40">│</span> {result.tone}
+                {result.category} <span className="opacity-40">|</span> {result.tone}
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5" aria-hidden />
@@ -258,9 +258,22 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
                 key={`${b.timecode}-${i}`}
                 className="group flex gap-3 rounded-sm border border-border/60 bg-background/40 px-3 py-2.5 transition-colors hover:border-primary/40"
               >
-                <span className="mt-[2px] inline-flex h-fit shrink-0 items-center gap-1 rounded-sm border border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] text-primary">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const seconds = timecodeToSeconds(b.timecode)
+                    const baseUrl = result.url.split("&t=")[0].split("?t=")[0]
+                    const separator = baseUrl.includes("?") ? "&" : "?"
+                    window.open(`${baseUrl}${separator}t=${seconds}`, "_blank")
+                  }}
+                  title={`Перейти на ${b.timecode}`}
+                  className={cn(
+                    "mt-[2px] inline-flex h-fit shrink-0 items-center gap-1 rounded-sm border border-primary/40 bg-primary/10 px-1.5 py-0.5 transition-colors hover:bg-primary/20",
+                    "font-sans text-[11px] font-bold tabular-nums text-primary", // Using font-sans to avoid dotted zeros
+                  )}
+                >
                   {b.timecode}
-                </span>
+                </button>
                 <div className="flex flex-col gap-1">
                   <span className="text-sm font-bold text-foreground leading-tight">{b.title}</span>
                   <span
@@ -286,7 +299,7 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
               <ul className="space-y-2">
                 {result.actionItems.map((item, i) => (
                   <li key={i} className="flex gap-2 text-sm text-foreground/90">
-                    <span className="text-success select-none">→</span>
+                    <span className="text-success select-none">{"->"}</span>
                     <span className={!isHardcore ? "font-sans" : ""}>{item}</span>
                   </li>
                 ))}
