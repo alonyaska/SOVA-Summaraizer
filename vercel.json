@@ -1,17 +1,18 @@
 {
-  "builds": [
-    {
-      "src": "api/main.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
+  "functions": {
+    "api/index.py": {
+      "runtime": "vercel-python@3.12.4",
+      "maxDuration": 60
     }
-  ],
+  },
   "rewrites": [
     {
       "source": "/api/v1/(.*)",
-      "destination": "/api/main"
+      "destination": "/api/index"
+    },
+    {
+      "source": "/health",
+      "destination": "/api/index"
     }
   ]
 }
