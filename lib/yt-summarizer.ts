@@ -3,19 +3,30 @@ export type Mode = "hardcore" | "casual"
 
 export type SummaryBullet = {
   timecode: string
-  text: string
+  title: string
+  description: string
+}
+
+export type Mentions = {
+  tools: string[]
+  people: string[]
+  resources: string[]
 }
 
 export type SummaryResult = {
   videoId: string
   url: string
   title: string
-  channel: string
-  durationOriginal: string
+  category: string
+  tone: string
+  targetAudience: string
   durationRead: string
-  thumbnail?: string
-  tldr: string
-  bullets: SummaryBullet[]
+  mainIdea: string
+  keyPoints: SummaryBullet[]
+  actionItems: string[]
+  notableQuotes: string[]
+  mentions: Mentions
+  tags: string[]
   cached?: boolean
 }
 
@@ -64,60 +75,38 @@ export function buildProcessingLog(_videoId: string): LogLine[] {
 const MOCK_LIBRARY: Omit<SummaryResult, "videoId" | "url">[] = [
   {
     title: "Архитектура трансформеров: почему внимание — это всё",
-    channel: "DeepLearning RU",
-    durationOriginal: "47:12",
+    category: "Лекция",
+    tone: "академичный",
+    targetAudience: "ML-инженеры и студенты технических вузов.",
     durationRead: "1:48",
-    tldr: "Механизм self-attention заменил рекуррентные сети, потому что распараллеливается и улавливает дальние зависимости в тексте лучше LSTM.",
-    bullets: [
-      { timecode: "00:42", text: "Проблема RNN/LSTM — последовательность блокирует распараллеливание на GPU." },
-      { timecode: "03:15", text: "Self-attention считает релевантность каждого токена ко всем остальным за один проход." },
-      { timecode: "09:08", text: "Multi-head attention: разные «головы» учат разные типы связей — синтаксис, семантику, кореференции." },
-      { timecode: "17:33", text: "Positional encoding нужен, потому что attention сам по себе не знает порядка слов." },
-      { timecode: "26:51", text: "Decoder-only архитектура (GPT) — это просто стек causal-attention блоков с next-token prediction." },
-      { timecode: "38:20", text: "Scaling laws: качество растёт предсказуемо с параметрами, данными и compute." },
+    mainIdea: "Механизм self-attention заменил рекуррентные сети, потому что распараллеливается и улавливает дальние зависимости в тексте лучше LSTM.",
+    keyPoints: [
+      { timecode: "00:42", title: "RNN Constraints", description: "Проблема RNN/LSTM — последовательность блокирует распараллеливание на GPU." },
+      { timecode: "03:15", title: "Self-Attention", description: "Self-attention считает релевантность каждого токена ко всем остальным за один проход." },
+      { timecode: "09:08", title: "Multi-head Attention", description: "Multi-head attention: разные «головы» учат разные типы связей — синтаксис, семантику, кореференции." },
     ],
+    action_items: ["Изучить механизм attention", "Прочитать статью Attention Is All You Need"],
+    notable_quotes: ["Внимание — это всё, что вам нужно"],
+    mentions: { tools: ["PyTorch", "TensorFlow"], people: ["Ashish Vaswani"], resources: ["ArXiv"] },
+    tags: ["AI", "ML", "Transformers", "Deep Learning", "NLP"],
+    actionItems: [],
+    notableQuotes: [],
   },
   {
     title: "Как стартапы умирают: 12 системных ошибок",
-    channel: "Product Mindset",
-    durationOriginal: "1:02:48",
+    category: "Бизнес-разбор",
+    tone: "аналитический",
+    targetAudience: "Фаундеры и продукт-менеджеры.",
     durationRead: "2:10",
-    tldr: "Большинство стартапов умирают не от конкурентов, а от потери фокуса, преждевременного масштабирования и игнорирования юнит-экономики.",
-    bullets: [
-      { timecode: "01:20", text: "Главный убийца — building в вакууме без customer development." },
-      { timecode: "08:44", text: "Преждевременный hire: 20 инженеров до product-market fit сжигают раннер за квартал." },
-      { timecode: "15:09", text: "Юнит-экономика должна работать на бумаге ДО первого платного канала." },
-      { timecode: "24:30", text: "Pivot — это не провал, это сигнал что команда умеет читать данные." },
-      { timecode: "37:55", text: "Co-founder conflict — причина смерти #2 после отсутствия рынка." },
-      { timecode: "51:12", text: "Растёт MRR ≠ растёт бизнес. Смотри на retention и payback period." },
+    mainIdea: "Большинство стартапов умирают не от конкурентов, а от потери фокуса, преждевременного масштабирования и игнорирования юнит-экономики.",
+    keyPoints: [
+      { timecode: "01:20", title: "Building in Vacum", description: "Главный убийца — building в вакууме без customer development." },
+      { timecode: "08:44", title: "Premature Scaling", description: "Преждевременный hire: 20 инженеров до product-market fit сжигают раннер за квартал." },
     ],
-  },
-  {
-    title: "Rust для Go-разработчиков: что реально отличается",
-    channel: "systems.dev",
-    durationOriginal: "32:05",
-    durationRead: "1:25",
-    tldr: "Rust даёт безопасность памяти без GC через ownership, но требует радикального пересмотра привычек проектирования по сравнению с Go.",
-    bullets: [
-      { timecode: "00:55", text: "Ownership и borrow checker — это не синтаксис, это новая ментальная модель." },
-      { timecode: "06:22", text: "Lifetimes явные там, где в Go компилятор просто выделяет на куче." },
-      { timecode: "12:40", text: "Result<T, E> + ? оператор приятнее, чем `if err != nil` в Go." },
-      { timecode: "19:08", text: "async в Rust — zero-cost, но требует runtime (tokio); в Go — встроен в язык." },
-      { timecode: "25:17", text: "Trait’ы мощнее интерфейсов Go, но кривая обучения круче." },
-    ],
-  },
-  {
-    title: "Минимализм в дизайне интерфейсов: миф или метод",
-    channel: "UI/UX Lab",
-    durationOriginal: "21:34",
-    durationRead: "1:05",
-    tldr: "Минимализм — это не «убрать всё», а убрать то, что не работает на цель пользователя на конкретном экране.",
-    bullets: [
-      { timecode: "01:10", text: "Whitespace — активный элемент композиции, а не пустота." },
-      { timecode: "05:48", text: "Hick’s Law: каждый лишний пункт меню удлиняет принятие решения." },
-      { timecode: "11:22", text: "Контраст и иерархия важнее количества акцентных цветов." },
-      { timecode: "16:40", text: "Иконка без подписи — почти всегда хуже, чем подпись без иконки." },
-    ],
+    actionItems: ["Сделать CustDev", "Проверить юнит-экономику"],
+    notableQuotes: ["Стартапы умирают не от голода, а от несварения"],
+    mentions: { tools: [], people: ["Paul Graham"], resources: ["The Lean Startup"] },
+    tags: ["Startup", "Business", "Product Management", "VC", "Growth"],
   },
 ]
 

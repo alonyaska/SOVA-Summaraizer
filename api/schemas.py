@@ -9,18 +9,30 @@ class VideoRequest(BaseModel):
 
 class SummaryBullet(BaseModel):
     timecode: str
-    text: str
+    title: str
+    description: str
+
+
+class Mentions(BaseModel):
+    tools: List[str] = []
+    people: List[str] = []
+    resources: List[str] = []
 
 
 class SummaryResult(BaseModel):
     video_id: str
     url: str
     title: str
-    channel: str
-    duration_original: str
+    category: str
+    tone: str
+    target_audience: str
     duration_read: str
     main_idea: str
     key_points: List[SummaryBullet]
+    action_items: List[str] = []
+    notable_quotes: List[str] = []
+    mentions: Mentions = Mentions()
+    tags: List[str] = []
     cached: bool = False
 
 

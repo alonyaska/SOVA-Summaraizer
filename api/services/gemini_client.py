@@ -14,17 +14,22 @@ class GeminiAdapter:
 
     async def summarize_transcript(self, transcript_text: str, video_id: str, url: str) -> SummaryResult:
         """Send transcript to Gemini and get structured summary back."""
-        prompt = f"""Ты профессиональный редактор и аналитик видеоконтента. 
-Прочитай следующий транскрипт YouTube видео и извлеки из него структурированную информацию.
+        prompt = f"""Ты профессиональный редактор, аналитик видеоконтента и конспект-мейкер. 
+Прочитай следующий транскрипт YouTube видео и извлеки из него глубокую структурированную информацию.
 
-Верни ответ СТРОГО в формате JSON (без markdown-обёртки, без ```json```) со следующими ключами:
-- "title": (строка) Название/тема видео, сформулированная на основе контента (1 предложение)
-- "channel": (строка) Если упоминается автор/канал — укажи, иначе напиши "Unknown"
-- "duration_original": (строка) Примерная длительность видео в формате "MM:SS" (оцени по объёму текста)
-- "duration_read": (строка) Примерное время чтения саммари в формате "M:SS"
-- "main_idea": (строка) Основная идея видео в 1-3 предложениях
-- "key_points": (массив объектов) От 3 до 7 главных тезисов. Каждый объект: {{"timecode": "MM:SS", "text": "тезис"}}
-  Таймкоды можешь расставить примерно, равномерно по длине видео.
+Верни ответ СТРОГО в формате JSON (без markdown-обёртки, без ```json```, без лишних слов) со следующими ключами:
+
+- "title": (строка) Оптимизированное, кликабельное название видео на основе контента.
+- "category": (строка) Тип видео (например: Подкаст, Туториал, Обзор, Новости, Влог, Лекция).
+- "tone": (строка) Тональность спикера (например: академичный, развлекательный, агрессивный).
+- "target_audience": (строка) Кому будет полезно это видео (1 предложение).
+- "duration_read": (строка) Примерное время чтения этого саммари (например: "2 мин").
+- "main_idea": (строка) Главная мысль или суть видео в 1-2 предложениях.
+- "key_points": (массив объектов) От 3 до 7 главных тезисов. Формат: {{"timecode": "MM:SS" (если в тексте есть таймкоды - бери их, если нет - пиши "00:00"), "title": "Заголовок тезиса", "description": "Раскрытие тезиса в 1 предложении"}}.
+- "action_items": (массив строк) 2-5 практических советов, шагов или выводов, которые можно применить на практике. Если их нет, верни пустой массив.
+- "notable_quotes": (массив строк) 1-2 самые яркие цитаты спикера.
+- "mentions": (объект) Упомянутые в видео сущности. Ключи: "tools" (сервисы/программы), "people" (личности), "resources" (книги/статьи). Если ничего не упомянуто, оставляй массивы пустыми.
+- "tags": (массив строк) 5 релевантных тегов для поиска.
 
 Транскрипт:
 ---
@@ -61,19 +66,23 @@ class GeminiAdapter:
             if isinstance(kp, dict):
                 bullets.append(SummaryBullet(
                     timecode=kp.get("timecode", "00:00"),
-                    text=kp.get("text", ""),
+                    title=kp.get("title", ""),
+                    description=kp.get("description", ""),
                 ))
-            elif isinstance(kp, str):
-                bullets.append(SummaryBullet(timecode="00:00", text=kp))
 
         return SummaryResult(
             video_id=video_id,
             url=url,
             title=parsed.get("title", "Без названия"),
-            channel=parsed.get("channel", "Unknown"),
-            duration_original=parsed.get("duration_original", "00:00"),
+            category=parsed.get("category", "Не определено"),
+            tone=parsed.get("tone", "Не определено"),
+            target_audience=parsed.get("target_audience", "Для всех"),
             duration_read=parsed.get("duration_read", "0:30"),
             main_idea=parsed.get("main_idea", ""),
             key_points=bullets,
+            action_items=parsed.get("action_items", []),
+            notable_quotes=parsed.get("notable_quotes", []),
+            mentions=parsed.get("mentions", {"tools": [], "people": [], "resources": []}),
+            tags=parsed.get("tags", []),
             cached=False,
         )

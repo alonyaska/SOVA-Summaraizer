@@ -16,18 +16,30 @@ export type ApiLogEntry = {
 
 export type ApiBullet = {
   timecode: string
-  text: string
+  title: string
+  description: string
+}
+
+export type ApiMentions = {
+  tools: string[]
+  people: string[]
+  resources: string[]
 }
 
 export type ApiSummaryResult = {
   video_id: string
   url: string
   title: string
-  channel: string
-  duration_original: string
+  category: string
+  tone: string
+  target_audience: string
   duration_read: string
   main_idea: string
   key_points: ApiBullet[]
+  action_items: string[]
+  notable_quotes: string[]
+  mentions: ApiMentions
+  tags: string[]
   cached: boolean
 }
 
@@ -77,14 +89,20 @@ export function mapApiResultToFrontend(api: ApiSummaryResult, url: string): Summ
     videoId: api.video_id,
     url: url,
     title: api.title,
-    channel: api.channel,
-    durationOriginal: api.duration_original,
+    category: api.category,
+    tone: api.tone,
+    targetAudience: api.target_audience,
     durationRead: api.duration_read,
-    tldr: api.main_idea,
-    bullets: api.key_points.map((kp) => ({
+    mainIdea: api.main_idea,
+    keyPoints: api.key_points.map((kp) => ({
       timecode: kp.timecode,
-      text: kp.text,
+      title: kp.title,
+      description: kp.description,
     })),
+    actionItems: api.action_items,
+    notableQuotes: api.notable_quotes,
+    mentions: api.mentions,
+    tags: api.tags,
     cached: api.cached,
   }
 }

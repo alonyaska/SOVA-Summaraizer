@@ -72,32 +72,40 @@ function useTypewriterWithTypo(text: string) {
 
 export function OutputWindow({ result, mode, onNewQuery }: Props) {
   const isHardcore = mode === "hardcore"
-  const { rendered: tldrText, done: tldrDone } = useTypewriterWithTypo(result.tldr)
+  const { rendered: mainIdeaText, done: mainIdeaDone } = useTypewriterWithTypo(result.mainIdea)
   const [revealedBullets, setRevealedBullets] = useState(0)
   const [copied, setCopied] = useState(false)
 
-  // Reveal bullets after TL;DR finishes
+  // Reveal bullets after Main Idea finishes
   useEffect(() => {
-    if (!tldrDone) return
+    if (!mainIdeaDone) return
     let i = 0
     const id = window.setInterval(() => {
       i += 1
       setRevealedBullets(i)
-      if (i >= result.bullets.length) window.clearInterval(id)
+      if (i >= result.keyPoints.length) window.clearInterval(id)
     }, 140)
     return () => window.clearInterval(id)
-  }, [tldrDone, result.bullets.length])
+  }, [mainIdeaDone, result.keyPoints.length])
 
   const plainText = useMemo(() => {
     const lines = [
-      `${result.title} — ${result.channel}`,
-      `Длительность: ${result.durationOriginal} → чтение: ${result.durationRead}`,
+      `${result.title}`,
+      `Категория: ${result.category} | Тон: ${result.tone}`,
+      `Аудитория: ${result.targetAudience}`,
+      `Время чтения: ${result.durationRead}`,
       `Источник: ${result.url}`,
       "",
-      `TL;DR: ${result.tldr}`,
+      `ГЛАВНАЯ МЫСЛЬ: ${result.mainIdea}`,
       "",
-      "Ключевые тезисы:",
-      ...result.bullets.map((b) => `  [${b.timecode}] ${b.text}`),
+      "КЛЮЧЕВЫЕ ТЕЗИСЫ:",
+      ...result.keyPoints.map((b) => `  [${b.timecode}] ${b.title}: ${b.description}`),
+      "",
+      "ПРАКТИЧЕСКИЕ ШАГИ:",
+      ...result.actionItems.map((a) => `  - ${a}`),
+      "",
+      "ЦИТАТЫ:",
+      ...result.notableQuotes.map((q) => `  "${q}"`),
     ]
     return lines.join("\n")
   }, [result])
@@ -125,7 +133,7 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
   }
 
   return (
-    <section aria-label="Результат анализа" className="mx-auto w-full max-w-5xl px-4 sm:px-8">
+    <section aria-label="Результат анализа" className="mx-auto w-full max-w-5xl px-4 sm:px-8 pb-20">
       <div
         className={cn(
           "overflow-hidden rounded-sm border bg-card font-mono",
@@ -168,12 +176,10 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
                 <Tv className="h-3.5 w-3.5" aria-hidden />
-                {result.channel}
+                {result.category} <span className="opacity-40">│</span> {result.tone}
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5" aria-hidden />
-                <span className="text-foreground">{result.durationOriginal}</span>
-                <span className="text-muted-foreground">→</span>
                 <span className="text-success">{result.durationRead} read</span>
               </span>
               <span className="inline-flex items-center gap-1.5">
@@ -181,6 +187,15 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
                 {result.videoId}
               </span>
             </div>
+            {result.tags && result.tags.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {result.tags.map(tag => (
+                  <span key={tag} className="px-1.5 py-0.5 bg-primary/5 border border-primary/20 text-[10px] text-primary/80 rounded-sm">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-2 sm:flex-nowrap">
@@ -204,38 +219,41 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
           </div>
         </div>
 
-        {/* TL;DR */}
-        <div className="border-b border-border px-4 py-4">
+        {/* Main Idea */}
+        <div className="border-b border-border px-4 py-4 bg-primary/5">
           <div className="mb-1 flex items-center gap-2 text-[11px] uppercase tracking-wider text-primary">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
-            TL;DR
+            MAIN_IDEA
           </div>
           <p
             className={cn(
-              "text-pretty text-sm leading-relaxed text-foreground sm:text-base",
+              "text-pretty text-sm font-medium leading-relaxed text-foreground sm:text-base",
               !isHardcore && "font-sans",
             )}
           >
-            {tldrText}
-            {!tldrDone && (
+            {mainIdeaText}
+            {!mainIdeaDone && (
               <span
                 aria-hidden
                 className="cursor-blink ml-0.5 inline-block h-[1em] w-[0.5ch] translate-y-[2px] bg-primary align-middle"
               />
             )}
           </p>
+          <div className="mt-2 text-[10px] text-muted-foreground opacity-70">
+            {"// Audience: "}{result.targetAudience}
+          </div>
         </div>
 
         {/* Bullets */}
-        <div className="px-4 py-4">
+        <div className="px-4 py-4 border-b border-border">
           <div className="mb-3 flex items-center justify-between text-[11px] uppercase tracking-wider text-muted-foreground">
             <span>{"// key_points"}</span>
             <span>
-              {Math.min(revealedBullets, result.bullets.length)} / {result.bullets.length}
+              {Math.min(revealedBullets, result.keyPoints.length)} / {result.keyPoints.length}
             </span>
           </div>
-          <ol className="space-y-2.5">
-            {result.bullets.slice(0, revealedBullets).map((b, i) => (
+          <ol className="space-y-3">
+            {result.keyPoints.slice(0, revealedBullets).map((b, i) => (
               <li
                 key={`${b.timecode}-${i}`}
                 className="group flex gap-3 rounded-sm border border-border/60 bg-background/40 px-3 py-2.5 transition-colors hover:border-primary/40"
@@ -243,26 +261,94 @@ export function OutputWindow({ result, mode, onNewQuery }: Props) {
                 <span className="mt-[2px] inline-flex h-fit shrink-0 items-center gap-1 rounded-sm border border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] text-primary">
                   {b.timecode}
                 </span>
-                <span
-                  className={cn(
-                    "text-sm leading-relaxed text-foreground/95",
-                    !isHardcore && "font-sans",
-                  )}
-                >
-                  {b.text}
-                </span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-bold text-foreground leading-tight">{b.title}</span>
+                  <span
+                    className={cn(
+                      "text-sm leading-relaxed text-foreground/80",
+                      !isHardcore && "font-sans",
+                    )}
+                  >
+                    {b.description}
+                  </span>
+                </div>
               </li>
             ))}
           </ol>
-
-          {revealedBullets >= result.bullets.length && (
-            <div className="mt-5 flex items-center gap-2 border-t border-dashed border-border pt-4 text-[11px] text-muted-foreground">
-              <span className="text-success">$</span> process exited with code{" "}
-              <span className="text-success">0</span>
-              <span className="cursor-blink ml-1 inline-block h-[1em] w-[0.5ch] translate-y-[2px] bg-muted-foreground/60 align-middle" />
-            </div>
-          )}
         </div>
+
+        {/* Action Items & Quotes */}
+        <div className="grid sm:grid-cols-2 border-b border-border">
+           <div className="px-4 py-4 border-b sm:border-b-0 sm:border-r border-border">
+              <div className="mb-3 text-[11px] uppercase tracking-wider text-success">
+                {"// action_items"}
+              </div>
+              <ul className="space-y-2">
+                {result.actionItems.map((item, i) => (
+                  <li key={i} className="flex gap-2 text-sm text-foreground/90">
+                    <span className="text-success select-none">→</span>
+                    <span className={!isHardcore ? "font-sans" : ""}>{item}</span>
+                  </li>
+                ))}
+                {result.actionItems.length === 0 && (
+                  <li className="text-xs text-muted-foreground italic">No specific actions identified</li>
+                )}
+              </ul>
+           </div>
+           <div className="px-4 py-4">
+              <div className="mb-3 text-[11px] uppercase tracking-wider text-warning">
+                {"// notable_quotes"}
+              </div>
+              <div className="space-y-3">
+                {result.notableQuotes.map((quote, i) => (
+                  <blockquote key={i} className="border-l-2 border-warning/30 pl-3 italic text-sm text-foreground/80">
+                    "{quote}"
+                  </blockquote>
+                ))}
+                {result.notableQuotes.length === 0 && (
+                  <div className="text-xs text-muted-foreground italic">No quotes extracted</div>
+                )}
+              </div>
+           </div>
+        </div>
+
+        {/* Mentions */}
+        <div className="px-4 py-4 bg-card/30">
+          <div className="mb-3 text-[11px] uppercase tracking-wider text-muted-foreground">
+            {"// entities_mentioned"}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <div className="text-[10px] text-muted-foreground mb-1">TOOLS / APPS</div>
+              <div className="flex flex-wrap gap-1">
+                {result.mentions.tools.map(t => <span key={t} className="text-[11px] bg-background border border-border px-1.5 py-0.5 rounded-sm">{t}</span>)}
+                {result.mentions.tools.length === 0 && <span className="text-[10px] text-muted-foreground italic">none</span>}
+              </div>
+            </div>
+            <div>
+              <div className="text-[10px] text-muted-foreground mb-1">PEOPLE</div>
+              <div className="flex flex-wrap gap-1">
+                {result.mentions.people.map(p => <span key={p} className="text-[11px] bg-background border border-border px-1.5 py-0.5 rounded-sm">{p}</span>)}
+                {result.mentions.people.length === 0 && <span className="text-[10px] text-muted-foreground italic">none</span>}
+              </div>
+            </div>
+            <div>
+              <div className="text-[10px] text-muted-foreground mb-1">RESOURCES</div>
+              <div className="flex flex-wrap gap-1">
+                {result.mentions.resources.map(r => <span key={r} className="text-[11px] bg-background border border-border px-1.5 py-0.5 rounded-sm">{r}</span>)}
+                {result.mentions.resources.length === 0 && <span className="text-[10px] text-muted-foreground italic">none</span>}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {revealedBullets >= result.keyPoints.length && (
+          <div className="px-4 py-3 bg-background/50 flex items-center gap-2 text-[11px] text-muted-foreground border-t border-border">
+            <span className="text-success select-none">$</span> process_summary --id={result.videoId}
+            <span className="text-success ml-2">EXIT_SUCCESS</span>
+            <span className="cursor-blink ml-1 inline-block h-[1em] w-[0.5ch] translate-y-[2px] bg-muted-foreground/60 align-middle" />
+          </div>
+        )}
       </div>
     </section>
   )
