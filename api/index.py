@@ -1,13 +1,12 @@
 """
 Vercel ASGI entry point.
-Vercel Python runtime detects this file and looks for the `app` variable.
-This file re-exports the FastAPI application.
+Vercel auto-detects this file and exposes it at /api.
+Re-exports the FastAPI application.
 """
 import sys
 import os
 from pathlib import Path
 
-# Add this directory to sys.path so imports from subpackages work
 current_dir = Path(__file__).parent.absolute()
 if str(current_dir) not in sys.path:
     sys.path.append(str(current_dir))
@@ -22,7 +21,6 @@ from collections.abc import AsyncGenerator
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    """Manage application lifecycle."""
     summarizer = VideoSummarizerService()
     app.state.summarizer = summarizer
     yield
@@ -36,7 +34,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS — allow Next.js dev server and Vercel production domain
+# CORS
 VERCEL_URL = os.environ.get("VERCEL_URL", "")
 PROD_ORIGIN = f"https://{VERCEL_URL}" if VERCEL_URL else ""
 
