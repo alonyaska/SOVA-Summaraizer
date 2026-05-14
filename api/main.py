@@ -34,12 +34,16 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS — allow Next.js dev server
+# CORS — allow Next.js dev server and Vercel production domain
+VERCEL_URL = os.environ.get("VERCEL_URL", "")
+PROD_ORIGIN = f"https://{VERCEL_URL}" if VERCEL_URL else ""
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        PROD_ORIGIN,
     ],
     allow_credentials=True,
     allow_methods=["*"],
