@@ -1,10 +1,10 @@
 {
-  "functions": {
-    "api/index.py": {
-      "runtime": "vercel-python@3.12.4",
-      "maxDuration": 60
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
     }
-  },
+  ],
   "rewrites": [
     {
       "source": "/api/v1/(.*)",
