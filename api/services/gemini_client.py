@@ -6,14 +6,14 @@ from schemas import SummaryBullet, SummaryResult
 
 
 class GeminiAdapter:
-    """Adapter for Google Gemini 2.5 Flash API."""
+    """Adapter for Google Gemma 4 26B API."""
 
     def __init__(self):
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
-        self.model_name = "models/gemini-2.5-flash"
+        self.model_name = "models/gemma-4-26b-a4b-it"  # Gemma 4 26B A4B IT
 
     async def summarize_transcript(self, transcript_text: str, video_id: str, url: str) -> SummaryResult:
-        """Send transcript to Gemini and get structured summary back."""
+        """Send transcript to Gemma 4 26B and get structured summary back."""
         prompt = f"""Ты профессиональный редактор, аналитик видеоконтента и конспект-мейкер. 
 Прочитай следующий транскрипт YouTube видео и извлеки из него глубокую структурированную информацию.
 
@@ -57,7 +57,7 @@ class GeminiAdapter:
             parsed = json.loads(raw_text)
         except json.JSONDecodeError as e:
             raise Exception(
-                f"Gemini вернул невалидный JSON: {e}\nОтвет: {response.text[:500]}"
+                f"Gemma 4 26B вернул невалидный JSON: {e}\nОтвет: {response.text[:500]}"
             )
 
         # Map key_points to SummaryBullet objects
