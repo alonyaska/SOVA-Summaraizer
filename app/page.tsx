@@ -124,20 +124,29 @@ export default function Page() {
 
         const task = await startSummarization(url)
 
+        // If task completed synchronously — show result immediately
+        if (task.status === "completed" && task.result) {
+          const mapped = mapApiResultToFrontend(task.result, url)
+          setPhase({ kind: "result", result: mapped })
+          return
+        }
+
+        // If failed synchronously — show error
+        if (task.status === "failed") {
+          setPhase({
+            kind: "error",
+            message: task.error || "Неизвестная ошибка бэкенда",
+          })
+          return
+        }
+
+        // Still processing — show logs and start polling
         setPhase((prev) => {
           if (prev.kind !== "loading") return prev
           return {
             ...prev,
             taskId: task.task_id,
-            log: [
-              ...prev.log,
-              {
-                time: new Date().toLocaleTimeString("ru-RU", { hour12: false }),
-                source: "sys_core" as const,
-                text: `Задача создана. ID: ${task.task_id.slice(0, 8)}...`,
-                status: "OK" as const,
-              },
-            ],
+            log: mapApiLogsToFrontend(task.logs),
           }
         })
 

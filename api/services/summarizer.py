@@ -59,23 +59,41 @@ class VideoSummarizerService:
     def get_task_status(self, task_id: str) -> Optional[TaskResponse]:
         return tasks_db.get(task_id)
 
-    async def process_video(self, url: str, lang: str) -> SummaryResult:
-        """Run full pipeline synchronously: transcript → summarize → return result."""
+    async def process_video(self, url: str, lang: str) -> TaskResponse:
+        """Run full pipeline synchronously: transcript → summarize → return TaskResponse."""
+        task_id = self.create_task()
         video_id = _parse_video_id(url)
 
-        # Step 1: Get transcript
-        transcript = await self.supadata.get_transcript(url=url, lang=lang)
+        _add_log(task_id, "sys_core", "Инициализация задачи...")
 
-        if not transcript or not transcript.strip():
-            raise Exception("Транскрипт пуст или недоступен.")
+        try:
+            # Step 1: Get transcript
+            _add_log(task_id, "sova_ai", "Загрузка субтитров...")
+            transcript = await self.supadata.get_transcript(url=url, lang=lang)
 
-        transcript_size = f"{len(transcript.encode('utf-8')) / 1024:.1f}KB"
+            if not transcript or not transcript.strip():
+                raise Exception("Транскрипт пуст или недоступен.")
 
-        # Step 2: Send to AI
-        result = await self.gemini.summarize_transcript(
-            transcript_text=transcript,
-            video_id=video_id,
-            url=url,
-        )
+            transcript_size = f"{len(transcript.encode('utf-8')) / 1024:.1f}KB"
+            _add_log(task_id, "sova_ai", f"Транскрипт загружен ({transcript_size})")
 
-        return result
+            # Step 2: Send to AI
+            _add_log(task_id, "sova_ai", "Запуск AI-анализа...")
+            result = await self.gemini.summarize_transcript(
+                transcript_text=transcript,
+                video_id=video_id,
+                url=url,
+            )
+
+            _add_log(task_id, "sys_core", "Суммаризация завершена.", status="OK")
+
+            # Store result in the task
+            tasks_db[task_id].status = "completed"
+            tasks_db[task_id].result = result
+
+        except Exception as e:
+            tasks_db[task_id].status = "failed"
+            tasks_db[task_id].error = str(e)
+            _add_log(task_id, "error", f"Ошибка: {e}", status="ERR")
+
+        return tasks_db[task_id]
